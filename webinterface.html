@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quran Detection API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Quran Detection API</h1>
+    <p>Enter text to detect Quranic content:</p>
+    <textarea id="inputText" rows="6" cols="50"></textarea><br><br>
+    <button onclick="sendRequest()">Submit</button>
+
+    <div id="result">
+        <h3>Results:</h3>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        function sendRequest() {
+            const text = document.getElementById('inputText').value;
+
+            if (!text) {
+                alert('Please enter some text.');
+                return;
+            }
+
+            // Send POST request to /detect_quran
+            fetch('http://127.0.0.1:8001/detect_quran', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Show the results in the result div
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('output').textContent = `Error: ${error}`;
+            });
+        }
+    </script>
+</body>
+</html>
